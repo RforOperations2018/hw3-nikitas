@@ -24,7 +24,10 @@ neighborhoods <- readOGR("./Boston_Neighborhoods.geojson")
 bos_311_subset <- read.csv("./Boston311_Subset.csv", header = TRUE, sep = ',')
 early_vote_locations <- readOGR("./Early_Voting_Locations/Early_Voting_Locations.shp", layer = "Early_Voting_Locations")
 hydro_line <- readOGR("./Hydrography_Line/Hydrography_Line.shp", layer = "Hydrography_Line", GDAL1_integer64_policy = TRUE)
+```
 
+```{r, warning=FALSE, message=FALSE}
+# I normally break up my chunks a little bit more for stuff like this, but no points deducted or anything
 # Customized Palette
 pal311 <- colorFactor(c("red", "green"), c("Closed", "Open"))
 
@@ -43,6 +46,7 @@ leaflet() %>%
   addPolylines(data = hydro_line, color = "blue") %>%
   addPolygons(data = neighborhoods, color = "darkgreen", fill = FALSE) %>%
   addCircleMarkers(data = bos_311_subset, lng = ~Longitude, lat = ~Latitude, radius = 1.2, color = ~pal311(CASE_STATUS)) %>%
+  # I think adding an additional portion to your palette for the waterlines would have made your map a tad bit less confusing
   addLegend(position = "bottomright" , pal = pal311, values = bos_311_subset$CASE_STATUS, title = "Manhole Status") %>%
   addAwesomeMarkers(data = early_vote_locations, 
                     lng = ~MatchLongi, lat = ~MatchLatit, 
